@@ -10,7 +10,14 @@ type MarketplaceStatsProps = {
   stats: MarketplaceStatsModel | null;
 };
 
+/** Set true when public marketplace aggregate stats are ready to show on the homepage. */
+const SHOW_MARKETPLACE_STATS_SECTION = false;
+
 export function MarketplaceStats({ stats }: MarketplaceStatsProps) {
+  if (!SHOW_MARKETPLACE_STATS_SECTION) {
+    return null;
+  }
+
   return (
     <Section className="relative border-t border-white/10 bg-gradient-to-b from-[#07121c] to-[#050d14] text-white">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-accent-coral/10 via-transparent to-transparent opacity-90" aria-hidden />
