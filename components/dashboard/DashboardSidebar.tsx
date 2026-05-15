@@ -84,7 +84,7 @@ export function DashboardSidebar({
             onClick={onClose}
             className="block rounded-xl px-3 py-2 text-sm font-medium text-white/75 transition-colors duration-200 ease-out hover:bg-white/[0.08] hover:text-white"
           >
-            ← Marketing site
+            ← back to Brook Planner
           </Link>
           <button
             type="button"
