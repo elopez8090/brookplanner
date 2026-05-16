@@ -1,7 +1,8 @@
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
+import { isPublicVendorDiscoveryEnabled } from "@/lib/marketplace/publicVendorDiscovery";
 
-const items = [
+const itemsWhenDiscoveryEnabled = [
   {
     title: "Structured marketplace",
     body: "Browse vendor profiles with logos, service areas, and categories — vendors respond with quotes and you pick who fits.",
@@ -31,7 +32,18 @@ const items = [
   },
 ];
 
+const itemsWhenDiscoveryPaused = [
+  {
+    title: "Post once, get matched",
+    body: "Vendors are matched after you post your event. Share your date, neighborhood, and services — qualified NYC vendors respond with quotes.",
+    icon: itemsWhenDiscoveryEnabled[0].icon,
+  },
+  itemsWhenDiscoveryEnabled[1],
+  itemsWhenDiscoveryEnabled[2],
+];
+
 export function TrustBullets() {
+  const items = isPublicVendorDiscoveryEnabled() ? itemsWhenDiscoveryEnabled : itemsWhenDiscoveryPaused;
   return (
     <Section className="border-t border-border-subtle bg-white">
       <Container>

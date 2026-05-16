@@ -14,6 +14,8 @@ import { bioExcerpt, parseServiceAreas, toTitleCase } from "@/lib/vendor-profile
 import { fetchPublicVendorDirectory } from "@/lib/vendor-profile/queries";
 import { VendorDirectoryTrustSignals } from "@/components/marketplace/VendorDirectoryTrustSignals";
 import { VendorDirectoryLogoImage } from "@/components/ui/VendorDirectoryLogoImage";
+import { PublicVendorDiscoveryPausedPanel } from "@/components/marketplace/PublicVendorDiscoveryPausedPanel";
+import { isPublicVendorDiscoveryEnabled } from "@/lib/marketplace/publicVendorDiscovery";
 
 type VendorsPageProps = {
   searchParams: Promise<{
@@ -96,6 +98,10 @@ function directoryHasActiveFilters(input: {
 }
 
 export default async function VendorsDirectoryPage({ searchParams }: VendorsPageProps) {
+  if (!isPublicVendorDiscoveryEnabled()) {
+    return <PublicVendorDiscoveryPausedPanel title="Post your event and receive quotes from NYC vendors" />;
+  }
+
   const params = await searchParams;
   const query = rpcOptionalText(firstSearchParam(params.q)) ?? "";
   const category = rpcOptionalText(firstSearchParam(params.category)) ?? "";

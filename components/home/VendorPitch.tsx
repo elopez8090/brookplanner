@@ -1,10 +1,12 @@
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { isPublicVendorDiscoveryEnabled } from "@/lib/marketplace/publicVendorDiscovery";
 
 const bulletColors = ["bg-accent-coral", "bg-emerald-300", "bg-accent-coral"] as const;
 
 export function VendorPitch() {
+  const discoveryEnabled = isPublicVendorDiscoveryEnabled();
   return (
     <Section className="border-y border-border-subtle bg-[#003C28] !py-20 text-white sm:!py-24 lg:!py-28">
       <Container>
@@ -27,13 +29,15 @@ export function VendorPitch() {
               <ButtonLink href="/pricing" variant="secondary">
                 See pricing
               </ButtonLink>
-              <ButtonLink
-                href="/vendors"
-                variant="secondary"
-                className="!rounded-xl !border-2 !border-white !bg-transparent !text-white !shadow-none hover:!border-white hover:!bg-accent-blue/35 hover:!text-white"
-              >
-                Preview directory
-              </ButtonLink>
+              {discoveryEnabled ? (
+                <ButtonLink
+                  href="/vendors"
+                  variant="secondary"
+                  className="!rounded-xl !border-2 !border-white !bg-transparent !text-white !shadow-none hover:!border-white hover:!bg-accent-blue/35 hover:!text-white"
+                >
+                  Preview directory
+                </ButtonLink>
+              ) : null}
             </div>
           </div>
           <div className="rounded-2xl border border-white/15 bg-white p-8 shadow-lg ring-1 ring-black/10">

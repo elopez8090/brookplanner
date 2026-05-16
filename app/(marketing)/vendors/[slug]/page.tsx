@@ -9,6 +9,8 @@ import { breadcrumbListJsonLd, localBusinessJsonLd } from "@/lib/seo/vendorListi
 import { absoluteUrl } from "@/lib/site";
 import { averageRating, fetchPublicReviewsForVendor } from "@/lib/reviews/queries";
 import { fetchPublicVendorBySlug } from "@/lib/vendor-profile/queries";
+import { PublicVendorDiscoveryPausedPanel } from "@/components/marketplace/PublicVendorDiscoveryPausedPanel";
+import { isPublicVendorDiscoveryEnabled } from "@/lib/marketplace/publicVendorDiscovery";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -71,6 +73,11 @@ export default async function VendorsCategoryOrProfilePage({ params, searchParam
   const { slug } = await params;
   const category = getVendorCategoryPageBySlug(slug);
   if (category) {
+    if (!isPublicVendorDiscoveryEnabled()) {
+      return (
+        <PublicVendorDiscoveryPausedPanel title={`${category.directoryCategoryName} — post your event for quotes`} />
+      );
+    }
     const sp = await searchParams;
     const sort = parseVendorDirectorySort(sp.sort);
     return <VendorCategoryHub config={category} query={sp.q ?? ""} area={sp.area ?? ""} sort={sort} />;

@@ -1,16 +1,19 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { isPublicVendorDiscoveryEnabled } from "@/lib/marketplace/publicVendorDiscovery";
 
 export function FinalCta() {
+  const discoveryEnabled = isPublicVendorDiscoveryEnabled();
   return (
     <div className="border-t border-border-subtle bg-background py-20 sm:py-24 lg:py-28">
       <Container>
         <div className="mx-auto max-w-3xl rounded-2xl bg-[#E85D4A] p-8 text-center text-white shadow-lg sm:p-10 lg:p-12">
           <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">Ready to compare NYC vendor quotes?</h2>
           <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/95 sm:mt-6">
-            Post your event brief, browse vendor profiles, and collect structured proposals — built for hosts planning real
-            gatherings across the city.
+            {discoveryEnabled
+              ? "Post your event brief, browse vendor profiles, and collect structured proposals — built for hosts planning real gatherings across the city."
+              : "Vendors are matched after you post your event. Post your brief and receive quotes from NYC vendors — built for hosts planning real gatherings across the city."}
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:mt-12 sm:flex-row sm:gap-4">
             <ButtonLink
@@ -20,12 +23,14 @@ export function FinalCta() {
             >
               Post Your Event
             </ButtonLink>
-            <Link
-              href="/vendors"
-              className="inline-flex min-w-[160px] items-center justify-center rounded-xl border-2 border-white bg-transparent px-5 py-3 text-sm font-semibold text-white transition-colors duration-200 ease-out hover:bg-white/10"
-            >
-              Browse vendors
-            </Link>
+            {discoveryEnabled ? (
+              <Link
+                href="/vendors"
+                className="inline-flex min-w-[160px] items-center justify-center rounded-xl border-2 border-white bg-transparent px-5 py-3 text-sm font-semibold text-white transition-colors duration-200 ease-out hover:bg-white/10"
+              >
+                Browse vendors
+              </Link>
+            ) : null}
           </div>
         </div>
       </Container>

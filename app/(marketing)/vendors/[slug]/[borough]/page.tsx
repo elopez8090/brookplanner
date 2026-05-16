@@ -8,6 +8,8 @@ import { parseVendorDirectorySort } from "@/lib/filters/phase30Search";
 import { BOROUGH_PAGES, getBoroughPageBySlug, isSupportedVendorBoroughRoute } from "@/lib/marketplace/boroughPages";
 import { getVendorCategoryPageBySlug, VENDOR_CATEGORY_PAGES, vendorCategoryBoroughPath } from "@/lib/marketplace/vendorCategoryPages";
 import { absoluteUrl } from "@/lib/site";
+import { PublicVendorDiscoveryPausedPanel } from "@/components/marketplace/PublicVendorDiscoveryPausedPanel";
+import { isPublicVendorDiscoveryEnabled } from "@/lib/marketplace/publicVendorDiscovery";
 
 type PageProps = {
   params: Promise<{ slug: string; borough: string }>;
@@ -54,6 +56,13 @@ export default async function VendorCategoryBoroughPage({ params, searchParams }
   }
   const cat = getVendorCategoryPageBySlug(slug)!;
   const bor = getBoroughPageBySlug(borough)!;
+  if (!isPublicVendorDiscoveryEnabled()) {
+    return (
+      <PublicVendorDiscoveryPausedPanel
+        title={`${bor.displayName} ${cat.directoryCategoryName} — post your event for quotes`}
+      />
+    );
+  }
   const sp = await searchParams;
   const sort = parseVendorDirectorySort(sp.sort);
   return <VendorCategoryBoroughHub category={cat} borough={bor} query={sp.q ?? ""} sort={sort} />;

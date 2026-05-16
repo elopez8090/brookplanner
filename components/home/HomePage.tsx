@@ -10,6 +10,8 @@ import { MarketplaceStats } from "@/components/home/MarketplaceStats";
 import { VendorPitch } from "@/components/home/VendorPitch";
 import { FinalCta } from "@/components/home/FinalCta";
 import { HostActivityRibbon } from "@/components/home/HostActivityRibbon";
+import { PublicVendorDiscoveryHomeCta } from "@/components/home/PublicVendorDiscoveryHomeCta";
+import { isPublicVendorDiscoveryEnabled } from "@/lib/marketplace/publicVendorDiscovery";
 
 export type HomePageProps = {
   featuredVendors: PublicVendorDirectoryRow[];
@@ -19,14 +21,21 @@ export type HomePageProps = {
 };
 
 export function HomePage({ featuredVendors, newVendors, categoryCards, marketplaceStats }: HomePageProps) {
+  const discoveryEnabled = isPublicVendorDiscoveryEnabled();
   return (
     <>
       <Hero />
       <HostActivityRibbon stats={marketplaceStats} />
       <TrustBullets />
-      <FeaturedCategories cards={categoryCards} />
-      <FeaturedVendors vendors={featuredVendors} />
-      <NewVendors vendors={newVendors} recentJoinCount={marketplaceStats?.vendorsJoinedLast30Days} />
+      {discoveryEnabled ? (
+        <>
+          <FeaturedCategories cards={categoryCards} />
+          <FeaturedVendors vendors={featuredVendors} />
+          <NewVendors vendors={newVendors} recentJoinCount={marketplaceStats?.vendorsJoinedLast30Days} />
+        </>
+      ) : (
+        <PublicVendorDiscoveryHomeCta />
+      )}
       <HowItWorksHome />
       <MarketplaceStats stats={marketplaceStats} />
       <VendorPitch />

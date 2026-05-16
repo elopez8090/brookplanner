@@ -1,11 +1,13 @@
 import { HomePage } from "@/components/home/HomePage";
 import { fetchHomepageMarketplaceDirectory, fetchMarketplaceStats } from "@/lib/home/queries";
+import { isPublicVendorDiscoveryEnabled } from "@/lib/marketplace/publicVendorDiscovery";
 
 export default async function Page() {
-  const [marketplaceStats, homeMarketplace] = await Promise.all([
-    fetchMarketplaceStats(),
-    fetchHomepageMarketplaceDirectory(),
-  ]);
+  const discoveryEnabled = isPublicVendorDiscoveryEnabled();
+  const marketplaceStats = await fetchMarketplaceStats();
+  const homeMarketplace = discoveryEnabled
+    ? await fetchHomepageMarketplaceDirectory()
+    : { featuredVendors: [], newVendors: [], categoryCards: [] };
 
   return (
     <HomePage

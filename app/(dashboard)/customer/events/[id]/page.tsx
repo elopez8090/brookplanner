@@ -11,6 +11,7 @@ import { StatusBadge } from "@/components/dashboard/StatusBadge";
 import { DeleteCustomerEventForm } from "@/components/events/DeleteCustomerEventForm";
 import { EventQuoteCard } from "@/components/events/EventQuoteCard";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { isPublicVendorDiscoveryEnabled } from "@/lib/marketplace/publicVendorDiscovery";
 import { getUserProfile } from "@/lib/auth/getUserProfile";
 import {
   fetchCustomerEventById,
@@ -187,7 +188,13 @@ export default async function CustomerEventDetailPage({ params, searchParams }: 
                     <ButtonLink href={`/events/${event.id}`} variant="secondary">
                       Preview compare layout
                     </ButtonLink>
-                    <ButtonLink href="/vendors">Browse vendor styles</ButtonLink>
+                    {isPublicVendorDiscoveryEnabled() ? (
+                      <ButtonLink href="/vendors">Browse vendor styles</ButtonLink>
+                    ) : (
+                      <ButtonLink href="/post-event" variant="secondary">
+                        Post another event
+                      </ButtonLink>
+                    )}
                   </div>
                 }
               />

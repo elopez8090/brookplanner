@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
+import { isPublicVendorDiscoveryEnabled } from "@/lib/marketplace/publicVendorDiscovery";
 
 const marketplaceTiles = [
   { label: "DJs & audio", tone: "from-accent-coral/25 to-accent-coral/5" },
@@ -60,6 +61,7 @@ function HeroMarketplaceIllustration() {
 }
 
 export function Hero() {
+  const discoveryEnabled = isPublicVendorDiscoveryEnabled();
   return (
     <div className="relative overflow-hidden border-b border-border-subtle bg-gradient-to-br from-brand-navy/[0.045] via-[#eef1ec] to-background">
       <div className="pointer-events-none absolute -right-24 top-0 h-80 w-80 rounded-full bg-accent-coral/16 blur-3xl" aria-hidden />
@@ -79,7 +81,9 @@ export function Hero() {
               Book The Right NYC Event Vendors Without The Stress
             </h1>
             <p className="mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-stone-700 sm:text-xl xl:leading-[1.65]">
-              Compare trusted DJs, photographers, caterers, venues, and party vendors — all in one place.
+              {discoveryEnabled
+                ? "Compare trusted DJs, photographers, caterers, venues, and party vendors — all in one place."
+                : "Post your event and receive quotes from NYC vendors — DJs, photographers, caterers, venues, and more."}
             </p>
 
             <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
@@ -90,13 +94,15 @@ export function Hero() {
               >
                 Post Your Event
               </ButtonLink>
-              <ButtonLink
-                href="/vendors"
-                variant="secondary"
-                className="sm:min-w-[200px] border-stone-300/95 px-6 py-3 text-base text-brand-navy shadow-sm hover:bg-stone-50"
-              >
-                Browse Vendors
-              </ButtonLink>
+              {discoveryEnabled ? (
+                <ButtonLink
+                  href="/vendors"
+                  variant="secondary"
+                  className="sm:min-w-[200px] border-stone-300/95 px-6 py-3 text-base text-brand-navy shadow-sm hover:bg-stone-50"
+                >
+                  Browse Vendors
+                </ButtonLink>
+              ) : null}
             </div>
 
             <p className="mt-8 text-sm leading-relaxed text-stone-600">

@@ -13,6 +13,8 @@ import {
 } from "@/lib/marketplace/neighborhoodPages";
 import { getVendorCategoryPageBySlug, VENDOR_CATEGORY_PAGES, vendorCategoryNeighborhoodPath } from "@/lib/marketplace/vendorCategoryPages";
 import { absoluteUrl } from "@/lib/site";
+import { PublicVendorDiscoveryPausedPanel } from "@/components/marketplace/PublicVendorDiscoveryPausedPanel";
+import { isPublicVendorDiscoveryEnabled } from "@/lib/marketplace/publicVendorDiscovery";
 
 type PageProps = {
   params: Promise<{ slug: string; borough: string; neighborhood: string }>;
@@ -61,6 +63,13 @@ export default async function VendorCategoryNeighborhoodPage({ params, searchPar
   const cat = getVendorCategoryPageBySlug(slug)!;
   const bor = getBoroughPageBySlug(borough)!;
   const hood = getNeighborhoodPageByRoute(borough, neighborhood)!;
+  if (!isPublicVendorDiscoveryEnabled()) {
+    return (
+      <PublicVendorDiscoveryPausedPanel
+        title={`${cat.directoryCategoryName} in ${hood.displayName} — post your event for quotes`}
+      />
+    );
+  }
   const sp = await searchParams;
   const sort = parseVendorDirectorySort(sp.sort);
   return <VendorCategoryNeighborhoodHub category={cat} borough={bor} neighborhood={hood} query={sp.q ?? ""} sort={sort} />;

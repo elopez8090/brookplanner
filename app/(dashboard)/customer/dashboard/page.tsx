@@ -4,6 +4,7 @@ import { DashboardCard } from "@/components/dashboard/DashboardCard";
 import { EventLeadCard } from "@/components/dashboard/EventLeadCard";
 import { EmptyState } from "@/components/dashboard/EmptyState";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { isPublicVendorDiscoveryEnabled } from "@/lib/marketplace/publicVendorDiscovery";
 import { getUserProfile } from "@/lib/auth/getUserProfile";
 import {
   fetchCustomerAcceptedQuoteCount,
@@ -96,6 +97,8 @@ export default async function CustomerDashboardPage() {
     onboardingSecondary = { href: "/customer/dashboard#my-events", label: "View my events" };
   }
 
+  const discoveryEnabled = isPublicVendorDiscoveryEnabled();
+
   return (
     <div className="space-y-8">
       <header className="space-y-4">
@@ -112,9 +115,11 @@ export default async function CustomerDashboardPage() {
             <ButtonLink href="/post-event" className="w-full justify-center px-6 py-3 text-base sm:w-auto">
               Post your event
             </ButtonLink>
-            <ButtonLink href="/vendors" variant="secondary" className="w-full justify-center sm:w-auto">
-              Browse vendors
-            </ButtonLink>
+            {discoveryEnabled ? (
+              <ButtonLink href="/vendors" variant="secondary" className="w-full justify-center sm:w-auto">
+                Browse vendors
+              </ButtonLink>
+            ) : null}
           </div>
         </div>
         <p className="text-xs leading-relaxed text-brand-navy-muted">
@@ -238,13 +243,23 @@ export default async function CustomerDashboardPage() {
           ) : totalQuotesReceived === 0 ? (
             <EmptyState
               title="No quotes yet — that is normal early on"
-              description="Vendors browse active events and respond when they are a fit. While you wait, tighten your event details or browse vendor profiles to shortlist styles you like."
+              description={
+                discoveryEnabled
+                  ? "Vendors browse active events and respond when they are a fit. While you wait, tighten your event details or browse vendor profiles to shortlist styles you like."
+                  : "Vendors browse active events and respond when they are a fit. While you wait, tighten your event details so the right NYC vendors can quote you."
+              }
               action={
                 <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
                   <ButtonLink href="/customer/dashboard#my-events">View my events</ButtonLink>
-                  <ButtonLink href="/vendors" variant="secondary">
-                    Browse vendors
-                  </ButtonLink>
+                  {discoveryEnabled ? (
+                    <ButtonLink href="/vendors" variant="secondary">
+                      Browse vendors
+                    </ButtonLink>
+                  ) : (
+                    <ButtonLink href="/post-event" variant="secondary">
+                      Post another event
+                    </ButtonLink>
+                  )}
                 </div>
               }
             />

@@ -1,4 +1,5 @@
 import { vendorCategoryHubPath } from "@/lib/marketplace/vendorCategoryPages";
+import { isPublicVendorDiscoveryEnabled } from "@/lib/marketplace/publicVendorDiscovery";
 
 export const MVP_CATEGORIES = [
   {
@@ -73,13 +74,25 @@ export const HOME_MARKETPLACE_CATEGORY_CARDS = [
   },
 ] as const;
 
+export type MarketingNavLink = { href: string; label: string };
+
 /** Marketing header center navigation only (CTAs and auth live in `SiteHeaderClient`). */
-export const NAV_LINKS = [
+export const NAV_LINKS: readonly MarketingNavLink[] = [
   { href: "/vendors", label: "Browse Vendors" },
   { href: "/categories", label: "Categories" },
   { href: "/how-it-works", label: "How It Works" },
   { href: "/vendor-signup", label: "For Vendors" },
-] as const;
+];
+
+const NAV_HIDDEN_WHEN_DISCOVERY_PAUSED = new Set(["/vendors", "/categories"]);
+
+/** Marketing header links — omits browse/discovery entries when `PUBLIC_VENDOR_DISCOVERY_ENABLED` is false. */
+export function marketingNavLinks(): readonly MarketingNavLink[] {
+  if (isPublicVendorDiscoveryEnabled()) {
+    return NAV_LINKS;
+  }
+  return NAV_LINKS.filter((item) => !NAV_HIDDEN_WHEN_DISCOVERY_PAUSED.has(item.href));
+}
 
 export const FOOTER_LINKS = [
   { href: "/how-it-works", label: "How It Works" },

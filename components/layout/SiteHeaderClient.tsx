@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { NAV_LINKS } from "@/lib/constants";
+import { marketingNavLinks } from "@/lib/constants";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { createClient } from "@/lib/supabase/client";
 import type { Profile } from "@/lib/auth/types";
@@ -489,7 +489,7 @@ export function SiteHeaderClient({
           className="hidden min-w-0 flex-1 justify-center gap-x-7 px-1 md:flex lg:gap-x-9 xl:gap-x-11"
           aria-label="Primary"
         >
-          {NAV_LINKS.map((item) => (
+          {marketingNavLinks().map((item) => (
             <Link key={item.href} href={item.href} className={`${navLinkClass} whitespace-nowrap`}>
               {item.label}
             </Link>
@@ -565,7 +565,7 @@ export function SiteHeaderClient({
       {mobileMenuOpen ? (
         <div className="border-t border-white/10 bg-[#004d40] px-4 py-5 md:hidden">
           <nav className="flex flex-col gap-3.5" aria-label="Mobile primary">
-            {NAV_LINKS.map((item) => (
+            {marketingNavLinks().map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
